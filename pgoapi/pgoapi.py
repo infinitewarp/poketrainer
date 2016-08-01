@@ -217,11 +217,16 @@ class PGoApi:
             self.sem.release()
 
     def gsleep(self, t):
-        gevent.sleep(t * self.sleep_mult)
+        t_ = t * self.sleep_mult
+        self.log.info("Pausing for %.2f seconds...", t_)
+        gevent.sleep(t_)
+        self.log.info("Done pausing. Onward!")
 
     def call(self):
+        self.log.info("Preparing for heartbeat.")
         self.cond_lock()
         self.gsleep(self.config.get("EXTRA_WAIT", 0.3))
+        self.log.info("Heartbeat time!")
         try:
             if not self._req_method_list.get(id(gevent.getcurrent()), []):
                 return False
@@ -250,6 +255,7 @@ class PGoApi:
             self.log.debug('Cleanup of request!')
             self._req_method_list[id(gevent.getcurrent())] = []
 
+            self.log.info("Finished heartbeat!")
             return response
         finally:
             self.cond_release()
@@ -291,6 +297,7 @@ class PGoApi:
                 self.log.debug("Adding '%s' to RPC request", name)
             return self
         if func.upper() in RequestType.keys():
+            self.log.info("Making request: %s", func.upper())
             return function
         else:
             raise AttributeError
@@ -956,7 +963,7 @@ class PGoApi:
                 self.log.info("Could not start Disk (lure) encounter for pokemon: %s",
                               POKEMON_NAMES.get(str(lureinfo.get('active_pokemon_id', 0)), "NA"))
         except Exception as e:
-            self.log.error("Error in disk encounter %s", e)
+            self.log.exception("Error in disk encounter %s", e)
             return False
 
     def do_catch_pokemon(self, encounter_id, spawn_point_id, capture_probability, pokemon):
@@ -1029,7 +1036,7 @@ class PGoApi:
                 self.log.info("Could not start encounter for pokemon: %s, status %s", pokemon.pokemon_type, result)
             return False
         except Exception as e:
-            self.log.error("Error in pokemon encounter %s", e)
+            self.log.exception("Error in pokemon encounter %s", e)
             return False
 
     def incubate_eggs(self):
