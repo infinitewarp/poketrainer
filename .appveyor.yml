@@ -19,9 +19,14 @@ environment:
     - PYTHON: "C:\\Python35-x64"
 
 install:
-  - "%PYTHON%\\python.exe -m pip install tox"
+  # upgrade pip to avoid out-of-date warnings
+  - "%PYTHON%\\python.exe -m pip install --disable-pip-version-check --user --upgrade pip"
+  - "%PYTHON%\\python.exe -m pip --version"
 
-build: off
+  # install the dependencies to run the tests
+  - ".appveyor/build.cmd %PYTHON%\\python.exe -m pip install tox"
+
+build: false
 
 test_script:
-  - "build.cmd %PYTHON%\\python.exe -m tox"
+  - ".appveyor/build.cmd %PYTHON%\\python.exe -m tox"
