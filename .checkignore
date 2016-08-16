@@ -1,3 +1,13 @@
 # Ignore folder content
-test/*
+tests/*
+library/api/*
 library/api/**
+library/api/pgoapi/protos/*
+library/api/pgoapi/protos/POGOProtos/*
+library/api/pgoapi/protos/POGOProtos/Data/*
+library/api/pgoapi/protos/POGOProtos/Inventory/*
+library/api/pgoapi/protos/POGOProtos/Map/*
+library/api/pgoapi/protos/POGOProtos/Networking/*
+library/api/pgoapi/protos/POGOProtos/Networking/Requests/*
+library/api/pgoapi/protos/POGOProtos/Settings/*
+library/api/pgoapi/protos/POGOProtos/Settings/Master/*
