@@ -130,12 +130,12 @@ def get_api_rpc(username):
         data = json.loads(data if len(data) > 0 else '{}')
         if username not in data:
             # FIXME Use logger instead of print statements!
-            print("There is no bot running with username '%s'!" % username)
+            print("There is no bot running with username '{0!s}'!".format(username))
             return None
         sock_port = int(data[username])
 
     c = zerorpc.Client()
-    c.connect("tcp://127.0.0.1:%i" % sock_port)
+    c.connect("tcp://127.0.0.1:{0:d}".format(sock_port))
     return c
 
 
@@ -150,7 +150,7 @@ def favicon():
 def status(username):
     c = get_api_rpc(username)
     if c is None:
-        return("There is no bot running with username '%s'!" % username)
+        return("There is no bot running with username '{0!s}'!".format(username))
     config = init_config(username)
     options['SCORE_METHOD'] = config.get('POKEMON_CLEANUP', {}).get("SCORE_METHOD", "CP")
     options['IGNORE_COLUMNS'] = config.get("IGNORE_COLUMNS", [])
@@ -158,7 +158,7 @@ def status(username):
     player_json = json.loads(c.get_player_info())
     currency = player_json['player_data']['currencies'][1]['amount']
     latlng = c.current_location()
-    latlng = "%f,%f" % (latlng[0], latlng[1])
+    latlng = "{0:f},{1:f}".format(latlng[0], latlng[1])
 
     items = json.loads(c.get_raw_inventory())
     pokemons_data = []

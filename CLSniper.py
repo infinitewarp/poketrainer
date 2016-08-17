@@ -24,7 +24,7 @@ cache = pylru.lrucache(15)
 
 
 def snipe(pokemon, user, coords):
-    print('Requesting %s for %s' % (pokemon, user))
+    print('Requesting {0!s} for {1!s}'.format(pokemon, user))
     try:
         new_url = base_url % dict(user=user, coords=coords)
         requests.get(new_url)
@@ -52,13 +52,13 @@ def get_latest_rares():
         name = pokemon['name']
         # don't attempt ones that we've already sniped
         if coords in cache:
-            print("We've already attempted %s, skipping..." % coords)
+            print("We've already attempted {0!s}, skipping...".format(coords))
             continue
         # don't attempt ones that are already gone
         if until > datetime.utcnow():
             if name.lower() in blacklist:
                 continue
-            print('Found a pokemon we want!, %s at %s' % (name, coords))
+            print('Found a pokemon we want!, {0!s} at {1!s}'.format(name, coords))
             cache[coords] = name
             time.sleep(10)
             processes = []

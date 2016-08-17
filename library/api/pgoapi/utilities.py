@@ -148,7 +148,7 @@ def long_to_bytes (val, endianness='big'):
     width += 8 - ((width % 8) or 8)
 
     # format width specifier: four (4) bits per hex digit
-    fmt = '%%0%dx' % (width // 4)
+    fmt = '%0{0:d}x'.format((width // 4))
 
     # prepend zero (0) to the width, to zero-pad the output
     s = unhexlify(fmt % val)

@@ -61,7 +61,7 @@ class RpcSocket(object):
             f.close()
 
         s = zerorpc.Server(self)
-        s.bind("tcp://127.0.0.1:%i" % sock_port)  # the free port should still be the same
+        s.bind("tcp://127.0.0.1:{0:d}".format(sock_port))  # the free port should still be the same
         self.rpc_sock = gevent.spawn(s.run)
         self.rpc_sock.link(self._callback)
         self.log.debug("Socket for push started on: tcp://127.0.0.1:%i", sock_port)
@@ -147,7 +147,7 @@ class BotConnection(object):
                 self.sock_port = int(sockets[self.username])
                 f.close()
             self._bot_rpc = zerorpc.Client()
-            self._bot_rpc.connect("tcp://127.0.0.1:%i" % self.sock_port)
+            self._bot_rpc.connect("tcp://127.0.0.1:{0:d}".format(self.sock_port))
         return self._bot_rpc
 
     def test_connection(self, retry=False):
@@ -255,7 +255,7 @@ def get(message):
     types = message['types']
     user = bot_users.get(username)
     if not user:
-        emit('pull', {'success': False, 'message': "Could not find bot '%s', will not get %s" % (username, types)})
+        emit('pull', {'success': False, 'message': "Could not find bot '{0!s}', will not get {1!s}".format(username, types)})
         logger.error("could not find bot '%s', will not get %s", username, types)
         return
     try:
@@ -310,7 +310,7 @@ def transfer(data):
     user = bot_users.get(username)
     if not user:
         logger.error("Could not find bot '%s', will not transfer %s", username, p_id)
-        emit('transfer', {'success': False, 'message': "Could not find bot '%s', will not transfer" % username})
+        emit('transfer', {'success': False, 'message': "Could not find bot '{0!s}', will not transfer".format(username)})
         return
     c = user.get_api_rpc()
     if c and c.release_pokemon_by_id(p_id) == 1:
@@ -326,7 +326,7 @@ def evolve(data):
     user = bot_users.get(username)
     if not user:
         logger.error("Could not find bot '%s', will not evolve %s", username, p_id)
-        emit('evolve', {'success': False, 'message': "Could not find bot '%s', will not evolve" % username})
+        emit('evolve', {'success': False, 'message': "Could not find bot '{0!s}', will not evolve".format(username)})
         return
     c = user.get_api_rpc()
     if c and c.evolve_pokemon_by_id(p_id):
@@ -342,7 +342,7 @@ def snipe(data):
     user = bot_users.get(username)
     if not user:
         logger.error("Could not find bot '%s', will not snipe %s", username, latlng)
-        emit('snipe', {'success': False, 'message': "Could not find bot '%s', will not snipe %s" % (username, latlng)})
+        emit('snipe', {'success': False, 'message': "Could not find bot '{0!s}', will not snipe {1!s}".format(username, latlng)})
         return
     c = user.get_api_rpc()
     try:

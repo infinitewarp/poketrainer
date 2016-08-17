@@ -71,7 +71,7 @@ class FortWalker(object):
                         # thus we show the total trip size here (after route is calculated) and not for every route-point
                         if not self.route_only_forts:
                             posf = self.parent.get_position()
-                            self.base_travel_link = "https://www.google.com/maps/dir/%s,%s/" % (posf[0], posf[1])
+                            self.base_travel_link = "https://www.google.com/maps/dir/{0!s},{1!s}/".format(posf[0], posf[1])
                             self.total_distance_traveled = 0
                             self.total_trip_distance = self.route['total_distance']
                             self.log.info('===============================================')
@@ -94,7 +94,7 @@ class FortWalker(object):
                             step_size=self.parent.step_size
                         )
                         posf = self.parent.get_position()
-                        self.base_travel_link = "https://www.google.com/maps/dir/%s,%s/" % (posf[0], posf[1])
+                        self.base_travel_link = "https://www.google.com/maps/dir/{0!s},{1!s}/".format(posf[0], posf[1])
                         self.total_distance_traveled = 0
                         self.total_trip_distance = route_data['total_distance']
                         self.log.info('===============================================')
@@ -144,7 +144,7 @@ class FortWalker(object):
                 self._cache_forts(forts=destinations)
 
         posf = self.parent.get_position()
-        self.base_travel_link = "https://www.google.com/maps/dir/%s,%s/" % (posf[0], posf[1])
+        self.base_travel_link = "https://www.google.com/maps/dir/{0!s},{1!s}/".format(posf[0], posf[1])
         self.total_distance_traveled = 0
 
         # honestly it makes no sense to use spin_all_forts without google, but i'm leaving it that way
@@ -158,7 +158,7 @@ class FortWalker(object):
                 self.parent.get_position(), (furthest_fort['latitude'], furthest_fort['longitude']),
                 use_google, self.parent.config.gmaps_api_key,
                 experimental and spin_all_forts,
-                map(lambda x: "via:%f,%f" % (x[0]['latitude'], x[0]['longitude']), destinations[1:]),
+                map(lambda x: "via:{0:f},{1:f}".format(x[0]['latitude'], x[0]['longitude']), destinations[1:]),
                 step_size=self.parent.step_size
             )
             self.route = route_data
@@ -182,7 +182,7 @@ class FortWalker(object):
         if self.parent.config.show_steps:
             travel_link = ''
             if self.parent.config.show_travel_link_with_steps:
-                travel_link = ': %s%s,%s' % (self.base_travel_link, next_point[0], next_point[1])
+                travel_link = ': {0!s}{1!s},{2!s}'.format(self.base_travel_link, next_point[0], next_point[1])
             self.log.info("Walking %.1fm%s", distance_to_point, travel_link)
         self.parent.api.set_position(*next_point)
         self.parent.push_to_web('position', 'update', next_point)

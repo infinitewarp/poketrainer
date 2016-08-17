@@ -76,7 +76,7 @@ def _get_field_value_adaptor(pb, field, type_callable_map=TYPE_CALLABLE_MAP, use
     if field.type in type_callable_map:
         return type_callable_map[field.type]
 
-    raise TypeError("Field %s.%s has unrecognised type id %d" % (
+    raise TypeError("Field {0!s}.{1!s} has unrecognised type id {2:d}".format(
         pb.__class__.__name__, field.name, field.type))
 
 
@@ -114,7 +114,7 @@ def _get_field_mapping(pb, dict_value, strict):
             continue
         if key not in pb.DESCRIPTOR.fields_by_name:
             if strict:
-                raise KeyError("%s does not have a field called %s" % (pb, key))
+                raise KeyError("{0!s} does not have a field called {1!s}".format(pb, key))
             continue
         field_mapping.append((pb.DESCRIPTOR.fields_by_name[key], value, getattr(pb, key, None)))
 
@@ -125,7 +125,7 @@ def _get_field_mapping(pb, dict_value, strict):
             raise ValueError("Extension keys must be integers.")
         if ext_num not in pb._extensions_by_number:
             if strict:
-                raise KeyError("%s does not have a extension with number %s. Perhaps you forgot to import it?" % (pb, key))
+                raise KeyError("{0!s} does not have a extension with number {1!s}. Perhaps you forgot to import it?".format(pb, key))
             continue
         ext_field = pb._extensions_by_number[ext_num]
         pb_val = None
@@ -176,5 +176,5 @@ def _string_to_enum(field, input_value):
     try:
         input_value = enum_dict[input_value].number
     except KeyError:
-        raise KeyError("`%s` is not a valid value for field `%s`" % (input_value, field.name))
+        raise KeyError("`{0!s}` is not a valid value for field `{1!s}`".format(input_value, field.name))
     return input_value

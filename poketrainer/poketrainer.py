@@ -131,7 +131,7 @@ class Poketrainer(object):
             f.close()
 
         s = zerorpc.Server(self)
-        s.bind("tcp://127.0.0.1:%i" % sock_port)  # the free port should still be the same
+        s.bind("tcp://127.0.0.1:{0:d}".format(sock_port))  # the free port should still be the same
         self.socket = gevent.spawn(s.run)
 
         # zerorpc requires gevent, thus we would need a solution for eventlets
@@ -266,7 +266,7 @@ class Poketrainer(object):
                 sock_port = int(sockets['web'])
                 f.close()
             self.web_rpc = zerorpc.Client()
-            self.web_rpc.connect("tcp://127.0.0.1:%i" % sock_port)
+            self.web_rpc.connect("tcp://127.0.0.1:{0:d}".format(sock_port))
         try:
             self.web_rpc.push(self.config.username, event, action, data)
             self.log.debug('Pushed data to web, event: %s, action: %s', event, action)
@@ -327,8 +327,7 @@ class Poketrainer(object):
                     self.thread_release()
             if (self.pokemon_caught > self.config.catch_pokemon_limit >= 0
                     or self.forts_spun > self.config.fort_spin_limit >= 0):
-                return('catch_pokemon_limit of %s or fort_spin_limit of %s reached, now stopping'
-                       % (self.config.catch_pokemon_limit, self.config.fort_spin_limit))
+                return('catch_pokemon_limit of {0!s} or fort_spin_limit of {1!s} reached, now stopping'.format(self.config.catch_pokemon_limit, self.config.fort_spin_limit))
             self.sleep(1.0)
 
     def _heartbeat(self, res=False, login_response=False):
@@ -416,7 +415,7 @@ class Poketrainer(object):
                 self.release.cleanup_pokemon()
 
             # save data dump
-            with open("data_dumps/%s.json" % self.config.username, "w") as f:
+            with open("data_dumps/{0!s}.json".format(self.config.username), "w") as f:
                 posf = self.get_position()
                 responses['lat'] = posf[0]
                 responses['lng'] = posf[1]
